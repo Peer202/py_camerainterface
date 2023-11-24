@@ -56,6 +56,23 @@ def convertAngletoIncrement():
 def convertIncrementtoAngle():
     increment = increment_Input_raw.value
     increment_Input_Angle.set_value(int((increment * (360/1000))))
+     
+def cameravaluechange():
+    print("Value Changed")
+    pass
+
+def saveimg():
+    imgname = cam_save_propname.value + "_" + cam_save_rpm.value +  "rpm_" + cam_save_suffix.value
+    ui.notify("Saving Img as " + imgname)
+    camera.savenextimg(imgname)
+
+def camerastartstop():
+    startstop = cam_acq_starttrigger.value
+    if(startstop):
+        camera.startCamera()
+    else:
+        camera.stopCamera()
+
 with ui.row():
     with ui.column():
         with ui.card():
@@ -79,8 +96,21 @@ with ui.row():
     with ui.card():
         # The image / Camera Stuff
         ui.label(text="Camera Preview")
-        src = 'https://picsum.photos/id/565/640/360'
-        cameraimage = ui.interactive_image(src) 
-        filename = ui.input(label="Filename",value="PropImage1")
-        image_savebutton = ui.button(text="Save Image")
+        with ui.row():
+            src = 'https://picsum.photos/id/565/640/360'
+            cameraimage = ui.interactive_image(src) 
+            with ui.column():
+                ui.label("Camera Settings")
+                cam_acq_starttrigger = ui.switch("Start Acquisition",value=True,on_change=lambda c: camerastartstop())
+                cam_acq_exttrigger = ui.switch("Use external Trigger")
+                cam_acq_time = ui.input(label="Shutterspeed [ms]",value=2,on_change=lambda c: cameravaluechange())
+                cam_acq_framerate = ui.input(label="Framerate [1/s]",value=20,on_change=lambda c: cameravaluechange())
+        with ui.row():
+            cam_save_propname = ui.input(label="Propellername")
+            cam_save_rpm = ui.input(label="Trial RPM")
+            cam_save_suffix = ui.input(label="Remark")
+            image_savebutton = ui.button(text="Save Image",on_click=lambda s: saveimg())
+            
+camera = CameraHandler(cameraimage)
+
 ui.run()
