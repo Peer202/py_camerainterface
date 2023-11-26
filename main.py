@@ -56,31 +56,7 @@ with CameraHandler() as camera:
     def convertIncrementtoAngle():
         increment = increment_Input_raw.value
         increment_Input_Angle.set_value(int((increment * (360/1000))))
-        
-    def cameravaluechange():
-        print("Value Changed")
-        pass
 
-    def saveimg():
-        imgname = cam_save_propname.value + "_" + cam_save_rpm.value +  "rpm_" + cam_save_suffix.value
-        ui.notify("Saving Img as " + imgname)
-        camera.savenextimg(imgname)
-
-    def camerastartstop():
-        startstop = cam_acq_starttrigger.value
-        if(startstop):
-            camera.startCamera()
-        else:
-            camera.stopCamera()
-
-    def getlatestimg():
-        raw_img = camera.getlatestimg()
-        img_array = raw_img.get_numpy_array()
-        img = Image.fromarray(img_array, 'L')
-        img.save("preview.jpg")
-        cameraimage.set_source("preview.jpg")
-        cameraimage.force_reload()
-        pass
 
     with ui.row():
         with ui.column():
@@ -102,25 +78,9 @@ with CameraHandler() as camera:
                 ui.button(text="Send to Device!",on_click=lambda c: sendValue())
                 ui.button(text="Read Current Value",on_click=lambda c: readValue())
 
-        with ui.card():
-            # The image / Camera Stuff
-            ui.label(text="Camera Preview")
-            with ui.row():
-                src = 'https://picsum.photos/id/565/640/360'
-                cameraimage = ui.interactive_image(src) 
-                with ui.column():
-                    ui.label("Camera Settings")
-                    #ui.icon("Done").bind_visibility_from(camera.isconnected)
-                    cam_acq_starttrigger = ui.switch("Start Acquisition",value=True,on_change=lambda c: camerastartstop())
-                    cam_acq_exttrigger = ui.switch("Use external Trigger")
-                    cam_acq_time = ui.input(label="Shutterspeed [ms]",value=2,on_change=lambda c: cameravaluechange())
-                    cam_acq_framerate = ui.input(label="Framerate [1/s]",value=20,on_change=lambda c: cameravaluechange())
-                    cam_acq_update = ui.button(text="Update Img",on_click=lambda s: getlatestimg())
-            with ui.row():
-                cam_save_propname = ui.input(label="Propellername")
-                cam_save_rpm = ui.input(label="Trial RPM")
-                cam_save_suffix = ui.input(label="Remark")
-                image_savebutton = ui.button(text="Save Image",on_click=lambda s: saveimg())
+        cameracard = ui.card()
+        camera.initGUI(cameracard)
+
                 
 
     ui.run(reload=False)

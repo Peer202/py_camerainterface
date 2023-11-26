@@ -79,11 +79,11 @@ class CameraHandler:
         self.saveimg = True
         self.filename = filename
 
-    def updateParameters(self,shutterSpeed,frameRate):
-        self.shutterspeed = shutterSpeed * 1000
-        self.frameRate = frameRate
-        self.cam.AcquisitionFrameRate.set(self.frameRate)
-        self.cam.ExposureTime.set(self.shutterspeed)
+    def updateExposureTime(self):
+        self.cam.ExposureTime.set((self.ui_settings_time.value * 1000))
+
+    def updateFrameRate(self):
+        self.cam.AcquisitionFrameRate.set(self.ui_settings_framerate.value)
 
     def getlatestimg(self):
         img = self.cam.data_stream[0].get_image()
