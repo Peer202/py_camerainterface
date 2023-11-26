@@ -1,6 +1,7 @@
 import gxipy as gx
+import cv2
 from nicegui import ui
-
+import datetime
 class CameraHandler:
     def __init__(self):
         self.saveimg = False
@@ -8,6 +9,8 @@ class CameraHandler:
         self.frameRate = 136
         self.shutterspeed = 2000
         self.isconnected = False
+        self.dosave = False
+        self.Filename = "default"
         self.device_manager = gx.DeviceManager()
         dev_num, dev_info_list = self.device_manager.update_device_list()
         if dev_num == 0:
@@ -16,11 +19,11 @@ class CameraHandler:
             print("Tried to connect, but device already open")
         else:
             self.cam = self.device_manager.open_device_by_index(1)
-            #self.cam.data_stream[0].register_capture_callback(imgCallback)
+            self.cam.data_stream[0].register_capture_callback(self.onNewImage)
             self.cam.stream_on()
             print("Camera Connected")
             self.isconnected = True
-    
+
     def __enter__(self):
         return self
 
@@ -88,3 +91,8 @@ class CameraHandler:
     def getlatestimg(self):
         img = self.cam.data_stream[0].get_image()
         return img
+
+    def saveLatestImg(self):
+        self.Filename = self.ui_settings_save_propname.value + "_" + self.ui_settings_save_rpm.value + "rpm_" + self.ui_settings_save_suffix.value
+        ui.notify("Saving Img as " + self.Filename)
+        self.dosave = True
