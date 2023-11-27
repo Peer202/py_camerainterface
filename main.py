@@ -3,6 +3,7 @@ import gxipy as gx
 from PIL import Image
 from Serial import SerialConnection
 from Camera import CameraHandler
+import cv2
 trigger_connection = SerialConnection()
 #camera = CameraHandler()
 with CameraHandler() as camera:
@@ -81,6 +82,6 @@ with CameraHandler() as camera:
         cameracard = ui.card()
         camera.initGUI(cameracard)
 
-                
-
+    #ui.timer(interval=0.1, callback=lambda: camera.onNewImage())
+             
     ui.run(reload=False)
