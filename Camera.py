@@ -65,7 +65,7 @@ class CameraHandler:
 
     def startCamera(self):
         self.cam.AcquisitionStart.send_command()
-        self.cam.ExposureTime.set(20000)
+        self.cam.ExposureTime.set(2000)
         self.cam.TriggerMode.set(gx.GxSwitchEntry.OFF)
         self.cam.AcquisitionFrameRate.set(20)
         self.cam.AcquisitionFrameRateMode.set(gx.GxSwitchEntry.ON)
@@ -90,6 +90,8 @@ class CameraHandler:
         if( self.ui_settings_externalTrigger.value):
             self.cam.TriggerMode.set(gx.GxSwitchEntry.ON)
             self.cam.TriggerSource.set(1)
+            #self.cam.TriggerFilterRaisingEdge.set(0)
+            self.cam.TriggerFilterFallingEdge.set(0)
         else:
             self.cam.TriggerMode.set(gx.GxSwitchEntry.OFF)
             self.cam.TriggerSource.set(0)
