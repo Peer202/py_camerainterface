@@ -28,7 +28,7 @@ with CameraHandler() as camera:
 
     def sendValue():
         value = int(increment_Input_raw.value)
-        ui.notify("Setting Increment Value: " + str(value))
+        #ui.notify("Setting Increment Value: " + str(value))
         success = trigger_connection.sendValue(value)
         if(success):
             ui.notify("Value Set!")
@@ -53,10 +53,12 @@ with CameraHandler() as camera:
     def convertAngletoIncrement():
         angle = increment_Input_Angle.value
         increment_Input_raw.set_value(int((angle * (1000/360))))
+        sendValue()
 
     def convertIncrementtoAngle():
         increment = increment_Input_raw.value
         increment_Input_Angle.set_value(int((increment * (360/1000))))
+        sendValue()
 
 
     with ui.row():
@@ -64,7 +66,7 @@ with CameraHandler() as camera:
             with ui.card():
                 # Communication Settings
                 ui.label("Connection Settings")
-                connect_Input_Device = ui.input(label="Serial Device Name",value="/dev/ttyACM3")
+                connect_Input_Device = ui.input(label="Serial Device Name",value="COM4")
                 connect_Input_Baud = ui.number(label="BaudRate",value=115200)
                 connect_button = ui.button(text='Connect to Device', on_click=lambda e: toggleConnect())
                 connect_testbutton = ui.button(text="Test Connection", on_click=lambda e: checkConnection())
