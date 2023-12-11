@@ -14,7 +14,11 @@ class SerialConnection:
             self.serialObject.open()
         except:
             return False
-        return  self.serialObject.isOpen()
+        success = self.checkConnection()
+        if(success):
+            return True
+        else:
+            return False
 
 
     def disconnect(self):
@@ -34,6 +38,17 @@ class SerialConnection:
 
     def isConfirmed(self):
         answer = self.readData()
+        if(answer == "CHECK"):
+            print("Command confirmed")
+            return True
+        elif(answer == "NOCOM"):
+            print("Command not recognized by Board")
+            return False
+        else:
+            print("Command not recognized by Board")
+            return False
+            
+
         return (answer == "CHECK")
 
     def readData(self):
@@ -44,6 +59,10 @@ class SerialConnection:
 
     def sendValue(self,value):
         self.sendData("S:" + str(value))
+        return self.isConfirmed()
+    
+    def sendSkipValue(self,value):
+        self.sendData("T:" + str(value))
         return self.isConfirmed()
     
     def getValue(self):
