@@ -28,7 +28,7 @@ class SerialConnection:
     def checkConnection(self):
         handshake = "TEST"
         self.sendData(handshake)
-        time.sleep(1)
+        time.sleep(0.1)
         return self.isConfirmed()
     
     def sendData(self,data):

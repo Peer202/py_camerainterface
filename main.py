@@ -7,8 +7,8 @@ import cv2
 trigger_connection = SerialConnection()
 global calculated_increments
 calculated_increments = 500
-#camera = CameraHandler()
-#with CameraHandler() as camera:
+camera = CameraHandler()
+
 def toggleConnect():
     connectionState = trigger_connection.serialObject.isOpen()
     if(connectionState):
@@ -72,7 +72,7 @@ with ui.row():
         with ui.card():
             # Communication Settings
             ui.label("Connection Settings")
-            connect_Input_Device = ui.input(label="Serial Device Name",value="/dev/ttyACM1")
+            connect_Input_Device = ui.input(label="Serial Device Name",value="COM4")
             connect_Input_Baud = ui.number(label="BaudRate",value=115200)
             connect_button = ui.button(text='Connect to Device', on_click=lambda e: toggleConnect())
             connect_testbutton = ui.button(text="Test Connection", on_click=lambda e: checkConnection())
@@ -98,9 +98,9 @@ with ui.row():
                 skip_button_large = ui.button(text="Skip 100 Increments",on_click=lambda e:skipIncrements(100))
             
 
-        #cameracard = ui.card()
-        #camera.initGUI(cameracard)
+        cameracard = ui.card()
+        camera.initGUI(cameracard)
 
     #ui.timer(interval=0.1, callback=lambda: camera.onNewImage())
              
-    ui.run(reload=True)
+    ui.run(reload=False)

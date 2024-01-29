@@ -48,8 +48,10 @@ class CameraHandler:
                 self.ui_settings_time = ui.number(label="ExposureTime [ms]",value=2,on_change=lambda c: self.updateExposureTime())
                 self.ui_settings_framerate = ui.number(label="Framerate [1/s]",value=20,on_change=lambda c: self.updateFrameRate())
             with ui.row():
+                self.ui_settings_save_foldername = ui.input(label="FolderName")
                 self.ui_settings_save_propname = ui.input(label="Propellername")
                 self.ui_settings_save_rpm = ui.input(label="Trial RPM")
+                self.ui_settings_save_vott = ui.input(label="Vott")
                 self.ui_settings_save_suffix = ui.input(label="Remark")
                 self.ui_settings_savebutton = ui.button(text="Save Image",on_click=lambda s: self.saveLatestImg())
         
@@ -107,9 +109,9 @@ class CameraHandler:
         #cv_image = raw_image.get_numpy_array()
         datestamp = datetime.datetime.now().strftime("%y-%m-%d-%H-%M-%S")
         global filename
-        filename = self.ui_settings_save_propname.value + "_" + self.ui_settings_save_rpm.value + "rpm_" + self.ui_settings_save_suffix.value + "_" + datestamp + ".jpg"
+        filename = self.ui_settings_save_foldername.value +"/"+ self.ui_settings_save_propname.value + "_" + self.ui_settings_save_rpm.value + "rpm_" + self.ui_settings_save_vott.value + "_" + self.ui_settings_save_suffix.value + "_" + datestamp + ".jpg"
         #cv2.imwrite(filename,cv_image) # saves the full resolution image
-        ui.notify("Saving Img as " + filename)
+        print("Saving Img as " + filename)
 
 
 def imageCallback(raw_image):
